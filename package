@@ -2,6 +2,5 @@
 
 mkdir -p dist
 cp manifest.json dist/
-cp github-markdown.css dist/
 cp bower_components/github-markdown-css/github-markdown.css dist/
 pulp build --to dist/content.js
