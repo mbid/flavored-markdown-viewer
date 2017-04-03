@@ -11,8 +11,6 @@ import Data.StrMap as StrMap
 import Data.Maybe (Maybe(..))
 import Data.Either (Either(..))
 import Control.Monad.Aff (Aff)
---import Control.Monad.Except (throwError)
---import Control.Monad.Eff.Exception (error)
 import Text.Base64 (encode64)
 import Data.Array (fromFoldable)
 
@@ -29,7 +27,6 @@ instance showGithubApiError :: Show GithubApiError where
     ", headers: " <> show resp.headers <>
     ", response: " <> show resp.response <>
     "}"
---derive instance ordButtonSlot :: Ord Slot
 
 markdownToHtml :: forall e.
   Maybe GithubAuth ->
