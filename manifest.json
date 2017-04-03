@@ -24,7 +24,9 @@
     	"*://*/*.md"
       ],
       "js": ["content.js"],
-      "css": ["github-markdown.css"],
+      "css": [
+        "github-markdown.css",
+	"markdown-container.css"],
       "run_at": "document_start"
     }
   ]

@@ -96,11 +96,11 @@ multiline :: forall p i. String -> Array (HTML p i)
 multiline = split (Pattern "\n") >>> map text >>> intersperse br_
 
 render :: forall e. State -> ParentHTML Query Raw.Query Slot (M e)
-render s = case s.html of
-  Nothing -> HH.div_ $ multiline s.markdown
-  Just html ->
-    HH.div [ class_ $ ClassName "markdown-body" ]
-    [ slot RenderedSlot rawHTML html absurd ]
+render s =
+  HH.div [ class_ $ ClassName "markdown-body" ] $
+  case s.html of
+    Nothing -> multiline s.markdown
+    Just html -> [ slot RenderedSlot rawHTML html absurd ]
 
 receiver :: Input -> Maybe (Query Unit)
 receiver = UpdateGlobalSettings unit >>> Just
