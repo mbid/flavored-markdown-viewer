@@ -19,12 +19,13 @@
         "file://*/*.md",
         "file://*/*.markdown"
       ],
-      "js": ["content.js"],
+      "js": [
+        "content.js",
+        "showdown.min.js"],
       "css": [
         "github-markdown.css",
-	"markdown-container.css"],
+	"style.css"],
       "run_at": "document_start"
     }
   ]
 }
-
