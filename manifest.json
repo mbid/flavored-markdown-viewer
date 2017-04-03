@@ -1,16 +1,13 @@
 {
-  "description": "Render markdown",
+  "description": "Preview github-flavored markdown in chrome.",
   "manifest_version": 2,
-  "name": "Markdown Renderer",
-  "version": "1.0",
+  "name": "Flavored Markdown Viewer",
+  "version": "0.1",
 
   "permissions": [
     "file://*/*.md",
-    "*://*/*.md",
     "file://*/*.markdown",
-    "https://api.github.com/*",
-    "webRequest",
-    "webRequestBlocking"
+    "https://api.github.com/*"
   ],
   "web_accessible_resources": [
     "github-markdown.css"
@@ -20,8 +17,7 @@
     {
       "matches": [
         "file://*/*.md",
-        "file://*/*.markdown",
-    	"*://*/*.md"
+        "file://*/*.markdown"
       ],
       "js": ["content.js"],
       "css": [
