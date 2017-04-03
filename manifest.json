@@ -1,0 +1,31 @@
+{
+  "description": "Render markdown",
+  "manifest_version": 2,
+  "name": "Markdown Renderer",
+  "version": "1.0",
+
+  "permissions": [
+    "file://*/*.md",
+    "*://*/*.md",
+    "file://*/*.markdown",
+    "https://api.github.com/*",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "web_accessible_resources": [
+    "github-markdown.css"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "file://*/*.md",
+        "file://*/*.markdown",
+    	"*://*/*.md"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
+

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+mkdir -p dist
+cp manifest.json dist
+cp github-markdown.css dist
+pulp build --to dist/content.js
