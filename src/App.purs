@@ -7,25 +7,37 @@ import Raw as Raw
 import ShowdownMarkdown as SM
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.Class (liftAff)
+import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.State.Class (gets, modify)
-import Data.Array (fromFoldable, init, last, null, singleton, snoc)
+import DOM (DOM)
+import DOM.HTML (window)
+import DOM.HTML.Event.HashChangeEvent (newURL)
+import DOM.HTML.Types (htmlDocumentToDocument)
+import DOM.HTML.Window (document)
+import DOM.Node.NonElementParentNode (getElementById)
+import DOM.Node.Types (Element, ElementId(..), documentToNonElementParentNode)
+import Data.Array (fromFoldable, init, last, null, snoc)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), fromJust)
+import Data.Nullable (toMaybe)
 import Data.String (Pattern(..), split)
 import GithubMarkdown (GithubApiError(..))
 import Halogen (Component, ParentDSL, ParentHTML, lifecycleParentComponent)
 import Halogen.Aff (awaitBody)
 import Halogen.Aff.Effects (HalogenEffects)
 import Halogen.HTML (ClassName(..), HTML, article, br_, h3_, p_, slot, text)
-import Halogen.HTML.Properties (class_, classes)
+import Halogen.HTML.Properties (class_)
 import Halogen.VDom.Driver (runUI)
 import Inner (getInnerText, setInnerHTML)
 import Network.HTTP.Affjax (AJAX)
 import Partial.Unsafe (unsafePartial)
 import Raw (rawHTML)
+import Routing (fragment, onHashChange)
 import Settings (Settings, SettingsOverride, emptyOverride, override)
+
+foreign import scrollIntoView  :: forall e. Element -> Boolean -> Eff (dom :: DOM | e) Unit
 
 type Effects e =
   ( console :: CONSOLE
@@ -54,6 +66,7 @@ type Input = Settings
 
 data Query a = UpdateGlobalSettings a Settings
              | Rerender a
+             | Navigate a String
 
 data Slot = UnrenderedSlot
           | RenderedSlot
@@ -97,6 +110,16 @@ eval =
             , html = Just $ SM.markdownToHtml markdown
             , renderer = Just Showdown
             }
+      pure next
+    Navigate next fragment -> do
+      let id = ElementId $ "user-content-" <> fragment
+      doc <- liftEff $ window >>= (document >>> map htmlDocumentToDocument)
+      n <- liftEff $ getElementById id (documentToNonElementParentNode doc)
+      case toMaybe n of
+        Nothing -> pure unit
+        Just el -> liftEff $ scrollIntoView el true
+      liftEff $ log fragment
+
       pure next
 
 intersperse :: forall a. a -> Array a -> Array a
@@ -172,6 +195,11 @@ runApp = do
   body <- awaitBody
   markdown <- liftEff $ getInnerText body
   liftEff $ setInnerHTML "" body
-  runUI (app markdown) { auth: Nothing } body
+  ui <- runUI (app markdown) { auth: Nothing } body
+  onHashChange 
+    \hcev -> case fragment $ newURL hcev of
+      Nothing -> pure unit
+      Just frag -> ui.query $ Navigate unit frag
+    
   liftEff $ log "App running!"
   pure unit
