@@ -51,7 +51,7 @@ markdownToHtml auth src = do
     content =
       A.printJson $ A.fromObject $ StrMap.fromFoldable
       [ Tuple "text" $ A.fromString src
-      , Tuple "mode" $ A.fromString "markdown" ]
+      , Tuple "mode" $ A.fromString "gfm" ]
     
     authHeader :: Maybe RequestHeader
     authHeader = case auth of
