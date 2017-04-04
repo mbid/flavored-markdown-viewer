@@ -5,4 +5,5 @@ cp manifest.json dist/
 cp bower_components/github-markdown-css/github-markdown.css dist/
 cp bower_components/showdown/dist/showdown.min.js dist/
 cp style.css dist/
+cp -r icons dist/
 pulp build --to dist/content.js
