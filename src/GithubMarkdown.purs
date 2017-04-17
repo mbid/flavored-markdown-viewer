@@ -16,7 +16,12 @@ import Network.HTTP.StatusCode (StatusCode(..))
 import Text.Base64 (encode64)
 
 
-type GithubAuth = { username :: String, password :: String }
+newtype GithubAuth = GithubAuth { username :: String, password :: String }
+
+username (GithubAuth auth) = auth.username
+password (GithubAuth auth) = auth.password
+
+derive instance eqGithubAuth :: Eq GithubAuth
 
 data GithubApiError = RateLimited
                     | UnknownError String
@@ -51,12 +56,12 @@ markdownToHtml auth src = do
     content =
       A.printJson $ A.fromObject $ StrMap.fromFoldable
       [ Tuple "text" $ A.fromString src
-      , Tuple "mode" $ A.fromString "gfm" ]
+      , Tuple "mode" $ A.fromString "markdown" ]
     
     authHeader :: Maybe RequestHeader
     authHeader = case auth of
       Nothing -> Nothing
-      Just auth' ->
+      Just (GithubAuth auth') ->
         Just $
         RequestHeader "Authorization" $
         "Basic " <> (encode64 $ auth'.username <> ":" <> auth'.password)
@@ -66,7 +71,7 @@ markdownToHtml auth src = do
       { url = "https://api.github.com/markdown"
       , method = Left POST
       , content = Just content
-      , username = _.username <$> auth
-      , password = _.password <$> auth
+      , username = username <$> auth
+      , password = password <$> auth
       , headers = defaultRequest.headers <> fromFoldable authHeader
       }

@@ -11,9 +11,30 @@
   padding: 45px;
 }
 
+/*
 .plain-body {
   padding: 45px;
   font-family: monospace;
+}
+*/
+
+.menu {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+}
+
+.modal-open {
+  overflow: inherit;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.icon-button {
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
 }
 
 .warning-box {

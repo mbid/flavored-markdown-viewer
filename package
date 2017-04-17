@@ -2,8 +2,22 @@
 
 mkdir -p dist
 cp manifest.json dist/
+
 cp bower_components/github-markdown-css/github-markdown.css dist/
-cp bower_components/showdown/dist/showdown.min.js dist/
+
+cp bower_components/showdown/dist/showdown.js dist/
+
+cp bower_components/jquery/dist/jquery.js dist/
+
+cp bower_components/font-awesome/fonts/fontawesome-webfont.woff dist/
+cp bower_components/font-awesome/css/font-awesome.css dist/
+cp fa.js dist/
+
+cp bower_components/bootstrap/dist/css/bootstrap.css dist/
+cp bower_components/bootstrap/dist/js/bootstrap.js dist/
+
 cp style.css dist/
+
 cp -r icons dist/
+
 pulp build --to dist/content.js
